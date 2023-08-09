@@ -49,6 +49,8 @@ suite("Functional Tests", function () {
    */
 
   suite("Routing tests", function () {
+    let bookIds = [];
+
     suite(
       "POST /api/books with title => create book object/expect book object",
 
@@ -72,6 +74,7 @@ suite("Functional Tests", function () {
                 mongoose.isValidObjectId(res.body._id),
                 "_id should be a valid ObjectId"
               );
+              bookIds.push(res.body._id);
               done();
             });
         });
@@ -120,11 +123,33 @@ suite("Functional Tests", function () {
 
     suite("GET /api/books/[id] => book object with [id]", function () {
       test("Test GET /api/books/[id] with id not in db", function (done) {
-        //done();
+        chai
+          .request(server)
+          .keepOpen()
+          .get("/api/books/64c765af111a2e1897790a8b")
+          .send()
+          .end(function (err, res) {
+            assert.equal(res.status, 400, "correct status code");
+            assert.equal(res.text, "no book exists");
+            done();
+          });
       });
 
       test("Test GET /api/books/[id] with valid id in db", function (done) {
-        //done();
+        chai
+          .request(server)
+          .keepOpen()
+          .get(`/api/books/${bookIds[0]}`)
+          .send()
+          .end(function (err, res) {
+            assert.equal(res.status, 200, "correct status code");
+            assert.isObject(res.body, "response should be an object");
+            assert.property(res.body, "title", "title is present");
+            assert.property(res.body, "_id", "_id is present");
+            assert.property(res.body, "comments", "comments is present");
+            assert.isArray(res.body.comments, "comments property is an array");
+            done();
+          });
       });
     });
 
