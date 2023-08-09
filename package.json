@@ -25,5 +25,8 @@
 		"hyperdev",
 		"express"
 	],
-	"license": "MIT"
+	"license": "MIT",
+	"devDependencies": {
+		"mongoose": "^7.4.2"
+	}
 }
