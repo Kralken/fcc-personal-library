@@ -94,7 +94,27 @@ suite("Functional Tests", function () {
 
     suite("GET /api/books => array of books", function () {
       test("Test GET /api/books", function (done) {
-        //done();
+        chai
+          .request(server)
+          .keepOpen()
+          .get("/api/books")
+          .send()
+          .end(function (err, res) {
+            assert.equal(res.status, 200, "correct status code");
+            assert.isArray(res.body, "response should be an array");
+            assert.property(res.body[0], "title", "title property is present");
+            assert.property(
+              res.body[0],
+              "_id",
+              "_id property should be present"
+            );
+            assert.property(
+              res.body[0],
+              "commentcount",
+              "comment count property should be present"
+            );
+            done();
+          });
       });
     });
 
