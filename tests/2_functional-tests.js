@@ -157,15 +157,59 @@ suite("Functional Tests", function () {
       "POST /api/books/[id] => add comment/expect book object with id",
       function () {
         test("Test POST /api/books/[id] with comment", function (done) {
-          //done();
+          chai
+            .request(server)
+            .keepOpen()
+            .post(`/api/books/${bookIds[0]}`)
+            .type("form")
+            .send({ comment: "this is a sample comment" })
+            .end(function (err, res) {
+              assert.equal(res.status, 200, "status code should be correct");
+              assert.isObject(res.body, "response should be an object");
+              assert.property(res.body, "title", "title is present");
+              assert.property(res.body, "_id", "_id is present");
+              assert.property(res.body, "comments", "comments is present");
+              assert.isArray(
+                res.body.comments,
+                "comments property is an array"
+              );
+              assert.include(
+                res.body.comments,
+                "this is a sample comment",
+                "new comment should be included"
+              );
+              done();
+            });
         });
 
         test("Test POST /api/books/[id] without comment field", function (done) {
-          //done();
+          chai
+            .request(server)
+            .keepOpen()
+            .post(`/api/books/${bookIds[0]}`)
+            .type("form")
+            .send()
+            .end(function (err, res) {
+              assert.equal(res.status, 400, "status code should be correct");
+              assert.equal(res.text, "missing required field comment");
+              done();
+            });
         });
 
         test("Test POST /api/books/[id] with comment, id not in db", function (done) {
-          //done();
+          chai
+            .request(server)
+            .keepOpen()
+            .post("/api/books/64c765af111a2e1897790a8b")
+            .type("form")
+            .send({
+              comment: "this is another comment",
+            })
+            .end(function (err, res) {
+              assert.equal(res.status, 400, "status code should be correct");
+              assert.equal(res.text, "no book exists");
+              done();
+            });
         });
       }
     );
