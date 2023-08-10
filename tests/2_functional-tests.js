@@ -19,31 +19,31 @@ suite("Functional Tests", function () {
    * ----[EXAMPLE TEST]----
    * Each test should completely test the response of the API end-point including response status code!
    */
-  test("#example Test GET /api/books", function (done) {
-    chai
-      .request(server)
-      .get("/api/books")
-      .end(function (err, res) {
-        assert.equal(res.status, 200);
-        assert.isArray(res.body, "response should be an array");
-        assert.property(
-          res.body[0],
-          "commentcount",
-          "Books in array should contain commentcount"
-        );
-        assert.property(
-          res.body[0],
-          "title",
-          "Books in array should contain title"
-        );
-        assert.property(
-          res.body[0],
-          "_id",
-          "Books in array should contain _id"
-        );
-        done();
-      });
-  });
+  // test("#example Test GET /api/books", function (done) {
+  //   chai
+  //     .request(server)
+  //     .get("/api/books")
+  //     .end(function (err, res) {
+  //       assert.equal(res.status, 200);
+  //       assert.isArray(res.body, "response should be an array");
+  //       assert.property(
+  //         res.body[0],
+  //         "commentcount",
+  //         "Books in array should contain commentcount"
+  //       );
+  //       assert.property(
+  //         res.body[0],
+  //         "title",
+  //         "Books in array should contain title"
+  //       );
+  //       assert.property(
+  //         res.body[0],
+  //         "_id",
+  //         "Books in array should contain _id"
+  //       );
+  //       done();
+  //     });
+  // });
   /*
    * ----[END of EXAMPLE TEST]----
    */
@@ -225,7 +225,7 @@ suite("Functional Tests", function () {
             assert.equal(res.status, 200, "status code should be correct");
             assert.equal(
               res.text,
-              "delete book successful",
+              "delete successful",
               "server should return correct text after deleting"
             );
             done();

@@ -142,7 +142,7 @@ module.exports = function (app) {
         //if successful response will be 'delete successful'
         let bookDoc = await Book.findOneAndDelete({ _id: bookid });
         if (!bookDoc) throw new InputError("no book exists");
-        res.status(200).send("delete book successful");
+        res.status(200).send("delete successful");
       } catch (e) {
         if (e instanceof InputError) {
           res.status(400).send(e.message);
