@@ -85,10 +85,34 @@ module.exports = function (app) {
       //json res format: {"_id": bookid, "title": book_title, "comments": [comment,comment,...]}
     })
 
-    .post(function (req, res) {
-      let bookid = req.params.id;
-      let comment = req.body.comment;
-      //json res format same as .get
+    .post(async function (req, res) {
+      try {
+        let bookid = req.params.id;
+        let comment = req.body.comment;
+        //json res format same as .get
+        if (!comment) throw new InputError("missing required field comment");
+
+        let bookDoc = await Book.findOne({ _id: bookid });
+        if (!bookDoc) throw new InputError("no book exists");
+
+        bookDoc.comments.push(comment);
+        bookDoc.markModified("comments");
+        await bookDoc.save();
+
+        res.status(200).json({
+          title: bookDoc.title,
+          _id: bookDoc._id,
+          comments: bookDoc.comments,
+        });
+      } catch (e) {
+        if (e instanceof InputError) {
+          res.status(400).send(e.message);
+        } else if (e.name == "CastError") {
+          res.status(400).send("no book exists");
+        } else {
+          res.status(500).send("something went wrong");
+        }
+      }
     })
 
     .delete(async function (req, res) {
