@@ -67,8 +67,15 @@ module.exports = function (app) {
       }
     })
 
-    .delete(function (req, res) {
+    .delete(async function (req, res) {
       //if successful response will be 'complete delete successful'
+      try {
+        let deleted = await Book.deleteMany({});
+        console.log("Deleted: " + deleted.deletedCount + " books");
+        res.status(200).send("complete delete successful");
+      } catch (e) {
+        res.status(500).send("something went wrong");
+      }
     });
 
   app
@@ -84,8 +91,19 @@ module.exports = function (app) {
       //json res format same as .get
     })
 
-    .delete(function (req, res) {
-      let bookid = req.params.id;
-      //if successful response will be 'delete successful'
+    .delete(async function (req, res) {
+      try {
+        let bookid = req.params.id;
+        //if successful response will be 'delete successful'
+        let bookDoc = await Book.findOneAndDelete({ _id: bookid });
+        if (!bookDoc) throw new InputError("no book exists");
+        res.status(200).send("delete book successful");
+      } catch (e) {
+        if (e instanceof InputError) {
+          res.status(400).send(e.message);
+        } else if (e.name == "CastError") {
+          res.status(400).send("no book exists");
+        }
+      }
     });
 };
