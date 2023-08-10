@@ -216,11 +216,37 @@ suite("Functional Tests", function () {
 
     suite("DELETE /api/books/[id] => delete book object id", function () {
       test("Test DELETE /api/books/[id] with valid id in db", function (done) {
-        //done();
+        chai
+          .request(server)
+          .keepOpen()
+          .delete(`/api/books/${bookIds[0]}`)
+          .send()
+          .end(function (err, res) {
+            assert.equal(res.status, 200, "status code should be correct");
+            assert.equal(
+              res.text,
+              "delete book successful",
+              "server should return correct text after deleting"
+            );
+            done();
+          });
       });
 
       test("Test DELETE /api/books/[id] with  id not in db", function (done) {
-        //done();
+        chai
+          .request(server)
+          .keepOpen()
+          .delete("/api/books/64c765af111a2e1897790a8b")
+          .send()
+          .end(function (err, res) {
+            assert.equal(res.status, 400, "correct status code");
+            assert.equal(
+              res.text,
+              "no book exists",
+              "text returned should be correct"
+            );
+            done();
+          });
       });
     });
   });
