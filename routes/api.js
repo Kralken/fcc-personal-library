@@ -9,6 +9,19 @@
 "use strict";
 const mongoose = require("mongoose");
 
+let bookSchema = new mongoose.Schema({
+  title: {
+    type: String,
+    required: true,
+  },
+  comments: {
+    type: [String],
+    default: [],
+  },
+});
+
+let Book = mongoose.Model(bookSchema, "Book");
+
 module.exports = function (app) {
   app
     .route("/api/books")
