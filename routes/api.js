@@ -38,9 +38,15 @@ class InputError extends Error {
 module.exports = function (app) {
   app
     .route("/api/books")
-    .get(function (req, res) {
+    .get(async function (req, res) {
       //response will be array of book objects
       //json res format: [{"_id": bookid, "title": book_title, "commentcount": num_of_comments },...]
+      let books = await Book.aggregate([
+        {
+          $project: { _id: 1, title: 1, commentcount: { $size: "$comments" } },
+        },
+      ]);
+      res.status(200).json(books);
     })
 
     .post(async function (req, res) {
@@ -80,9 +86,24 @@ module.exports = function (app) {
 
   app
     .route("/api/books/:id")
-    .get(function (req, res) {
-      let bookid = req.params.id;
-      //json res format: {"_id": bookid, "title": book_title, "comments": [comment,comment,...]}
+    .get(async function (req, res) {
+      try {
+        let bookid = req.params.id;
+        //json res format: {"_id": bookid, "title": book_title, "comments": [comment,comment,...]}
+        let bookDoc = await Book.findOne({ _id: bookid }).select([
+          "_id",
+          "title",
+          "comments",
+        ]);
+        if (!bookDoc) throw new InputError("no book exists");
+        res.status(200).json(bookDoc);
+      } catch (e) {
+        if (e instanceof InputError) {
+          res.status(400).send(e.message);
+        } else {
+          res.status(500).send("something went wrong");
+        }
+      }
     })
 
     .post(async function (req, res) {
