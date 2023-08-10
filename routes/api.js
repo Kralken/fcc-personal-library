@@ -20,7 +20,7 @@ let bookSchema = new mongoose.Schema({
   },
 });
 
-let Book = mongoose.Model(bookSchema, "Book");
+let Book = mongoose.model("Book", bookSchema);
 
 module.exports = function (app) {
   app
