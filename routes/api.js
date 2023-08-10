@@ -65,7 +65,7 @@ module.exports = function (app) {
         });
       } catch (e) {
         if (e instanceof InputError) {
-          res.status(400).send(e.message);
+          res.status(200).send(e.message);
         } else {
           console.log(e);
           res.status(500).send("something went wrong");
@@ -99,7 +99,7 @@ module.exports = function (app) {
         res.status(200).json(bookDoc);
       } catch (e) {
         if (e instanceof InputError) {
-          res.status(400).send(e.message);
+          res.status(200).send(e.message);
         } else {
           res.status(500).send("something went wrong");
         }
@@ -127,9 +127,9 @@ module.exports = function (app) {
         });
       } catch (e) {
         if (e instanceof InputError) {
-          res.status(400).send(e.message);
+          res.status(200).send(e.message);
         } else if (e.name == "CastError") {
-          res.status(400).send("no book exists");
+          res.status(200).send("no book exists");
         } else {
           res.status(500).send("something went wrong");
         }
@@ -145,9 +145,9 @@ module.exports = function (app) {
         res.status(200).send("delete successful");
       } catch (e) {
         if (e instanceof InputError) {
-          res.status(400).send(e.message);
+          res.status(200).send(e.message);
         } else if (e.name == "CastError") {
-          res.status(400).send("no book exists");
+          res.status(200).send("no book exists");
         }
       }
     });

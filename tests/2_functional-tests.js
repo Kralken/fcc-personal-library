@@ -87,7 +87,7 @@ suite("Functional Tests", function () {
             .type("form")
             .send({ invalidProp: "invalid value" })
             .end(function (err, res) {
-              assert.equal(res.status, 400, "correct status code");
+              assert.equal(res.status, 200, "correct status code");
               assert.equal(res.text, "missing required field title");
               done();
             });
@@ -129,7 +129,7 @@ suite("Functional Tests", function () {
           .get("/api/books/64c765af111a2e1897790a8b")
           .send()
           .end(function (err, res) {
-            assert.equal(res.status, 400, "correct status code");
+            assert.equal(res.status, 200, "correct status code");
             assert.equal(res.text, "no book exists");
             done();
           });
@@ -190,7 +190,7 @@ suite("Functional Tests", function () {
             .type("form")
             .send()
             .end(function (err, res) {
-              assert.equal(res.status, 400, "status code should be correct");
+              assert.equal(res.status, 200, "status code should be correct");
               assert.equal(res.text, "missing required field comment");
               done();
             });
@@ -206,7 +206,7 @@ suite("Functional Tests", function () {
               comment: "this is another comment",
             })
             .end(function (err, res) {
-              assert.equal(res.status, 400, "status code should be correct");
+              assert.equal(res.status, 200, "status code should be correct");
               assert.equal(res.text, "no book exists");
               done();
             });
@@ -239,7 +239,7 @@ suite("Functional Tests", function () {
           .delete("/api/books/64c765af111a2e1897790a8b")
           .send()
           .end(function (err, res) {
-            assert.equal(res.status, 400, "correct status code");
+            assert.equal(res.status, 200, "correct status code");
             assert.equal(
               res.text,
               "no book exists",
