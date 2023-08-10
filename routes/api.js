@@ -22,6 +22,13 @@ let bookSchema = new mongoose.Schema({
 
 let Book = mongoose.model("Book", bookSchema);
 
+class InputError extends Error {
+  constructor(message) {
+    super(message);
+    this.name = "InputError";
+  }
+}
+
 module.exports = function (app) {
   app
     .route("/api/books")
